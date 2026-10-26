@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Department of Predatory Relations — ID Generator</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="header-left">
+        <h1>Department of Predatory Relations</h1>
+        <p class="subtitle">Official Vore Registration ID Card Generator</p>
+      </div>
+      <div class="header-right">
+        <button id="btn-randomize" class="btn btn-secondary">Randomize</button>
+        <button id="btn-download" class="btn btn-primary">Download PNG</button>
+      </div>
+    </header>
+
+    <main class="main-layout">
+      <!-- LEFT: FORM -->
+      <section class="form-panel">
+        <div class="form-section">
+          <h2>Card Appearance</h2>
+          <div class="form-row">
+            <label for="theme">Color Theme</label>
+            <select id="theme">
+              <option value="white">White Government (Default)</option>
+              <option value="midnight">Midnight</option>
+              <option value="blood">Blood Red</option>
+              <option value="slate">Slate</option>
+              <option value="custom">Custom…</option>
+            </select>
+          </div>
+          <div class="form-row custom-colors" id="custom-colors" hidden>
+            <label>Primary</label>
+            <input type="color" id="color-primary" value="#1a1a2e" />
+            <label>Accent</label>
+            <input type="color" id="color-accent" value="#e94560" />
+            <label>Text</label>
+            <input type="color" id="color-text" value="#ffffff" />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Identity</h2>
+          <div class="form-row">
+            <label for="photo">Portrait Photo</label>
+            <input type="file" id="photo" accept="image/*" />
+            <div class="crop-controls" id="crop-controls" hidden>
+              <label>Zoom</label>
+              <input type="range" id="photo-zoom" min="100" max="250" value="100" />
+              <label>X Offset</label>
+              <input type="range" id="photo-x" min="-50" max="50" value="0" />
+              <label>Y Offset</label>
+              <input type="range" id="photo-y" min="-50" max="50" value="0" />
+            </div>
+          </div>
+          <div class="form-row">
+            <label for="name">Full Name / Alias</label>
+            <input type="text" id="name" placeholder="e.g. Vorath the Insatiable" maxlength="40" />
+          </div>
+          <div class="form-row">
+            <label for="role">Registered Role</label>
+            <select id="role">
+              <option value="Predator">Predator</option>
+              <option value="Prey">Prey</option>
+              <option value="Switch">Switch</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="entrance">Preferred Entrance</label>
+            <select id="entrance">
+              <option value="Oral">Oral</option>
+              <option value="Anal">Anal</option>
+              <option value="Unbirth">Unbirth</option>
+              <option value="Tail">Tail</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Ratings & Classification</h2>
+          <div class="form-row">
+            <label for="appetite">Appetite Rating <span id="appetite-label">(3 — Steady)</span></label>
+            <input type="range" id="appetite" min="1" max="6" value="3" />
+          </div>
+          <div class="form-row">
+            <label for="danger">Danger Level <small>(size + personality)</small></label>
+            <select id="danger">
+              <option value="Low">Low</option>
+              <option value="Moderate">Moderate</option>
+              <option value="High">High</option>
+              <option value="Extreme">Extreme</option>
+              <option value="Catastrophic">Catastrophic</option>
+            </select>
+          </div>
+          <div class="form-row checkbox-row">
+            <label>
+              <input type="checkbox" id="on-watch" />
+              Mark as DANGEROUS / ON WATCH
+            </label>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Document Details</h2>
+          <div class="form-row">
+            <label for="id-number">ID Number</label>
+            <input type="text" id="id-number" placeholder="VR-2026-XXXXXX" maxlength="20" />
+          </div>
+          <div class="form-row">
+            <label for="expiration">Expiration Date</label>
+            <input type="date" id="expiration" />
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Reverse Side</h2>
+          <div class="form-row">
+            <label for="belly-photo">Belly / Interior Photo</label>
+            <input type="file" id="belly-photo" accept="image/*" />
+          </div>
+          <div class="form-row">
+            <label for="total-swallowed">Total Swallowed</label>
+            <input type="number" id="total-swallowed" min="0" value="0" />
+          </div>
+          <div class="form-row">
+            <label for="total-digested">Total Digested</label>
+            <input type="number" id="total-digested" min="0" value="0" />
+          </div>
+          <div class="form-row">
+            <label for="safety-blurb">Safety / Legal Blurb</label>
+            <select id="safety-blurb">
+              <option value="1">Standard Caution</option>
+              <option value="2">Predator Disclaimer</option>
+              <option value="3">Prey Advisory</option>
+              <option value="4">Full Liability Waiver</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h2>Card Controls</h2>
+          <div class="form-row">
+            <button id="btn-flip" class="btn btn-secondary full-width">Flip Card</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: LIVE PREVIEW -->
+      <section class="preview-panel">
+        <div class="card-stage">
+          <div class="id-card" id="id-card" data-side="front">
+            <!-- FRONT -->
+            <div class="card-face card-front">
+              <div class="card-header">
+                <div class="agency-seal">DPR</div>
+                <div class="agency-text">
+                  <div class="agency-name">DEPARTMENT OF PREDATORY RELATIONS</div>
+                  <div class="agency-sub">OFFICIAL REGISTRATION CARD</div>
+                </div>
+              </div>
+
+              <div class="card-body">
+                <div class="photo-area">
+                  <div class="photo-frame" id="photo-frame">
+                    <img id="photo-preview" alt="Portrait" hidden />
+                    <div class="photo-placeholder" id="photo-placeholder">
+                      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                  </div>
+                  <div class="on-watch-stamp" id="on-watch-stamp" hidden>DANGEROUS<br/>ON WATCH</div>
+                </div>
+
+                <div class="info-area">
+                  <div class="info-block">
+                    <div class="label">NAME</div>
+                    <div class="value" id="preview-name">—</div>
+                  </div>
+                  <div class="info-grid">
+                    <div class="info-block">
+                      <div class="label">ROLE</div>
+                      <div class="value" id="preview-role">—</div>
+                    </div>
+                    <div class="info-block">
+                      <div class="label">ENTRANCE</div>
+                      <div class="value" id="preview-entrance">—</div>
+                    </div>
+                    <div class="info-block">
+                      <div class="label">APPETITE</div>
+                      <div class="value" id="preview-appetite">—</div>
+                    </div>
+                    <div class="info-block">
+                      <div class="label">DANGER</div>
+                      <div class="value" id="preview-danger">—</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-footer">
+                <div class="footer-left">
+                  <div class="label">ID NUMBER</div>
+                  <div class="value mono" id="preview-id">VR-2026-XXXXXX</div>
+                </div>
+                <div class="footer-right">
+                  <div class="label">EXPIRES</div>
+                  <div class="value" id="preview-exp">—</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- BACK -->
+            <div class="card-face card-back">
+              <div class="back-header">
+                <div class="agency-name-sm">DEPARTMENT OF PREDATORY RELATIONS</div>
+                <div class="id-back mono" id="preview-id-back">VR-2026-XXXXXX</div>
+              </div>
+
+              <div class="belly-area">
+                <div class="belly-frame" id="belly-frame">
+                  <img id="belly-preview" alt="Belly" hidden />
+                  <div class="belly-placeholder" id="belly-placeholder">
+                    <span>BELLY / INTERIOR IMAGE</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="stats-row">
+                <div class="stat-box">
+                  <div class="stat-label">TOTAL SWALLOWED</div>
+                  <div class="stat-value" id="preview-swallowed">0</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-label">TOTAL DIGESTED</div>
+                  <div class="stat-value" id="preview-digested">0</div>
+                </div>
+              </div>
+
+              <div class="magnetic-strip"></div>
+
+              <div class="safety-text" id="preview-safety">
+                This document does not guarantee safe reform. Digestion remains at the sole discretion of the registered predator. Carry and present at your own risk.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="preview-hint">Click the card or use the Flip button to see the reverse side</p>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>Unofficial fan tool • Pure client-side • No data is uploaded or stored</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
